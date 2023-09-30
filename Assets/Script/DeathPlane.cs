@@ -1,35 +1,23 @@
 using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeathPlane : MonoBehaviour
 {
-    public GameObject Player;
-    Vector3 OriginalPlayerPosition;
-    // Start is called before the first frame update
-    void Start()
-    {
-        OriginalPlayerPosition = Player.transform.position;
-    }
+    //public GameObject Player;
 
-    void Update()
+    public void OnTriggerEnter(Collider other)
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (other.tag == "Player")
         {
-            RestartGame();
+            Debug.Log(" You touched the deathplane ");
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
         }
+
     }
 
-    public void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            RestartGame();
-        }
-    }
-
-    public void RestartGame()
-    {
-        Player.transform.position = OriginalPlayerPosition;
-    }
 }

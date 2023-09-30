@@ -59,11 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\MenuManager.cs" />
-    <Compile Include="Assets\Script\PlayerCam.cs" />
     <Compile Include="Assets\Script\CharacterMovement.cs" />
+    <Compile Include="Assets\Script\SpinTrap.cs" />
     <Compile Include="Assets\Script\GameManager.cs" />
     <Compile Include="Assets\Script\DeathPlane.cs" />
-    <Compile Include="Assets\Script\LavaCollision.cs" />
+    <Compile Include="Assets\Script\FinishLevel1.cs" />
     <Compile Include="Assets\Script\TrapBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
