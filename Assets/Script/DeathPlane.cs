@@ -13,7 +13,7 @@ public class DeathPlane : MonoBehaviour
         if (other.tag == "Player")
         {
             Debug.Log(" You touched the deathplane ");
-
+            GameManager.Score = 0;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         }
