@@ -31,5 +31,36 @@ public class BluePowerUp : MonoBehaviour
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
     }
 
-  
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == ("Player"))
+        {
+            Debug.Log("Player touched the bluepowerup!");
+
+            Vector3 boxPosition = transform.position;
+
+            // Create and position the Particle System at the box's location.
+            ParticleSystem particles = Instantiate(particleSystemPrefab, boxPosition, Quaternion.identity);
+
+            // Play the particle effect.
+            particles.Play();
+
+            // hide the blue box.
+            gameObject.SetActive(false);
+            Invoke("UnhideTarget", 30.0f);
+
+           // CharacterMovement cm = other.GetComponent<CharacterMovement>();
+
+           // cm.hasDoubleJump = true;
+
+            Destroy(particles, 2.0f);
+        }
+
+    }
+
+    public void UnhideTarget()
+    {
+        gameObject.SetActive(true);
+    }
+
 }

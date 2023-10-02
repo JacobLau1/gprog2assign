@@ -66,6 +66,7 @@
     <Compile Include="Assets\Script\YellowPowerUp.cs" />
     <Compile Include="Assets\Script\DeathPlane.cs" />
     <Compile Include="Assets\Script\FinishLevel1.cs" />
+    <Compile Include="Assets\Script\CameraRotate.cs" />
     <Compile Include="Assets\Script\TrapBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>

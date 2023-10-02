@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(Instance);
+        //Instance = this;
+       // DontDestroyOnLoad(Instance);
     }
 
     public void IncrementScore()

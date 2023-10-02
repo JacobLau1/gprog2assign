@@ -12,10 +12,10 @@ public class CharacterMovement : MonoBehaviour
 
     public bool groundedPlayer;
     public float mouseSensitivy = 5.0f;
-   
+
     private CharacterController controller;
     private Animator animator;
-
+   
     public float walkSpeed = 5;
     public float runSpeed = 8;
     public float jumpHeight = 1f;
@@ -23,19 +23,15 @@ public class CharacterMovement : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
-       
+        animator = GetComponent<Animator>();
     }
 
     public void Update()
     {
-  
-        ProcessMovement();
+        ProcessMovement11();
         ProcessGravity();
         UpdateRotation();
-        //print("veloctiy:" + playerVelocity);
-       // print("move:" + move);
     }
 
     public void LateUpdate()
@@ -48,18 +44,58 @@ public class CharacterMovement : MonoBehaviour
         animator.applyRootMotion = false;
     }
 
-
-    void UpdateRotation()
+    void ProcessMovement11()
     {
-        transform.Rotate(0, Input.GetAxis("Mouse X") * mouseSensitivy, 0, Space.Self);
+        //good movement and camera
+        //just sometimes hard to jump while running
+        //also isGrounded is always on?
 
+        // Get the camera's forward and right vectors
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        // Ignore vertical components
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+
+        // Normalize to ensure consistent speed
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // Calculate the movement direction based on input
+        Vector3 moveDirection = (cameraForward * Input.GetAxis("Vertical")) + (cameraRight * Input.GetAxis("Horizontal"));
+
+        // Apply the movement direction to the character's transform
+        if (moveDirection != Vector3.zero)
+        {
+            // Normalize the movement direction for consistent speed
+            moveDirection.Normalize();
+
+            // Move the character
+            controller.Move(moveDirection * GetMovementSpeed() * Time.deltaTime);
+
+            // Set animator parameters for animation
+            animator.SetFloat("Speed", moveDirection.magnitude); // Adjust animation speed based on moveDirection magnitude
+        //    animator.SetBool("isMoving", true); // Set an "isMoving" parameter for your idle vs. movement animations
+        }
+        else
+        {
+            // If no movement input, set animator parameters accordingly
+            animator.SetFloat("Speed", 0f);
+        //    animator.SetBool("isMoving", false);
+        }
     }
-    
+
+    void UpdateRotation()       //rotates player based on mouse
+    {
+        //transform.Rotate(0, Input.GetAxis("Mouse X") * mouseSensitivy, 0, Space.Self);
+        float mouseX = Input.GetAxis("Mouse X");
+        transform.Rotate(0, mouseX * mouseSensitivy, 0, Space.Self);
+    }
+
     void ProcessMovement()
     {
-
-     
-        // Moving the character forward according to the speed
+        // Moving the character forward according to the speed (either walk or run speed)
         float speed = GetMovementSpeed();
 
         // Get the camera's forward and right vectors
@@ -101,12 +137,7 @@ public class CharacterMovement : MonoBehaviour
         // Apply gravity and move the character
         playerVelocity = gravity * Time.deltaTime + movement;
         controller.Move(playerVelocity);
-
-
     }
-    
-
-
 
     void UpdateAnimator()
     {
@@ -176,5 +207,4 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 }
-
 
