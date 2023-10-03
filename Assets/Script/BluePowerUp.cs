@@ -53,6 +53,9 @@ public class BluePowerUp : MonoBehaviour
 
            // cm.hasDoubleJump = true;
 
+            CharacterMovement cm = other.GetComponent<CharacterMovement>();
+            //cm.hasDoubleJump = true;
+
             Destroy(particles, 2.0f);
         }
 

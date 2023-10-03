@@ -20,6 +20,14 @@ public class CharacterMovement : MonoBehaviour
     public float runSpeed = 8;
     public float jumpHeight = 1f;
     public float gravityValue = -9.81f;
+    //public bool hasDoubleJump = false;
+    // private static readonly int ForwardFlipTrigger = Animator.StringToHash("ForwardFlip");
+    //private bool isJumpAnimationComplete = true;
+
+    [SerializeField] private float jumpPower;
+    private int _numberOfJumps;
+    [SerializeField] private int maxNumberOfJumps = 2;
+
 
     private void Start()
     {
@@ -32,6 +40,7 @@ public class CharacterMovement : MonoBehaviour
         ProcessMovement11();
         ProcessGravity();
         UpdateRotation();
+        //HandleDoubleJump();
     }
 
     public void LateUpdate()
@@ -43,6 +52,97 @@ public class CharacterMovement : MonoBehaviour
     {
         animator.applyRootMotion = false;
     }
+    /*
+    public void isJumpAnimationComplete()
+    {
+        // Add any additional logic you want for when the jump animation is complete.
+
+        // Reset double jump ability when the jump animation is complete
+        hasDoubleJump = true;
+    }
+    */
+
+    public void ProcessGravity1()
+    {
+        bool wasGrounded = controller.isGrounded; // Store the previous grounded state
+
+        if (controller.isGrounded)
+        {
+            if (playerVelocity.y < 0.0f)
+            {
+                playerVelocity.y = -1.0f;
+            }
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+            }
+
+            // Reset double jump ability when grounded
+          //  hasDoubleJump = true;
+        }
+        else
+        {
+            playerVelocity.y += gravityValue * Time.deltaTime;
+
+            // Check if the character was previously grounded but is no longer
+            if (wasGrounded)
+            {
+                // Character is no longer grounded, set isGrounded to false
+                groundedPlayer = false;
+            }
+        }
+
+        controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
+    }
+    /*
+    public void OnJumpAnimationComplete()
+    {
+      //  isJumpAnimationComplete = true;
+    }
+    */
+    /*
+    private void HandleDoubleJump()
+    {
+        if (hasDoubleJump && !controller.isGrounded && Input.GetButtonDown("Jump") && isJumpAnimationComplete)
+        {
+            // Trigger the forward flip animation
+            animator.SetTrigger(ForwardFlipTrigger);
+
+            // Apply double jump force
+            playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+
+            // Disable double jump ability
+            hasDoubleJump = false;
+
+            // Set jump animation as not complete
+            isJumpAnimationComplete = false;
+        }
+    }
+    */
+    /*
+    private void HandleDoubleJump()
+    {
+        if (hasDoubleJump && !controller.isGrounded)
+        {
+            if (Input.GetButtonDown("Jump") && isJumpAnimationComplete)
+            {
+                // Trigger the forward flip animation
+                animator.SetTrigger(ForwardFlipTrigger);
+
+                // Apply double jump force
+                playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+
+                // Disable double jump ability
+                hasDoubleJump = false;
+
+                // Set jump animation as not complete
+                isJumpAnimationComplete = false;
+            }
+        }
+    }
+
+    */
 
     void ProcessMovement11()
     {
@@ -93,52 +193,6 @@ public class CharacterMovement : MonoBehaviour
         transform.Rotate(0, mouseX * mouseSensitivy, 0, Space.Self);
     }
 
-    void ProcessMovement()
-    {
-        // Moving the character forward according to the speed (either walk or run speed)
-        float speed = GetMovementSpeed();
-
-        // Get the camera's forward and right vectors
-        Vector3 cameraForward = Camera.main.transform.forward;
-        Vector3 cameraRight = Camera.main.transform.right;
-
-        // Make sure to flatten the vectors so that they don't contain any vertical component
-        cameraForward.y = 0;
-        cameraRight.y = 0;
-
-        // Normalize the vectors to ensure consistent speed in all directions
-        cameraForward.Normalize();
-        cameraRight.Normalize();
-
-        // Calculate the movement direction based on input and camera orientation
-        Vector3 moveDirection = (cameraForward * Input.GetAxis("Vertical")) + (cameraRight * Input.GetAxis("Horizontal"));
-
-        // Apply the movement direction and speed
-        Vector3 movement = moveDirection.normalized * speed * Time.deltaTime;
-
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                gravity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-            }
-            else
-            {
-                // Dont apply gravity if grounded and not jumping
-                gravity.y = -1.0f;
-            }
-        }
-        else
-        {
-            // Since there is no physics applied on character controller we have this applies to reapply gravity
-            gravity.y += gravityValue * Time.deltaTime;
-        }
-        // Apply gravity and move the character
-        playerVelocity = gravity * Time.deltaTime + movement;
-        controller.Move(playerVelocity);
-    }
-
     void UpdateAnimator()
     {
         bool isGrounded = controller.isGrounded;
@@ -160,12 +214,26 @@ public class CharacterMovement : MonoBehaviour
         }
 
         animator.SetBool("isGrounded", isGrounded);
-
+        /*
         if (Input.GetButtonDown("Fire1"))
         {
             animator.applyRootMotion = true;
             animator.SetTrigger("doRoll");
         }
+        
+
+        if (Input.GetButtonDown("Jump") && !isGrounded)
+        {
+            animator.applyRootMotion = true;
+            animator.SetTrigger("ForwardFlip"); // Trigger forward flip animation
+        }
+        
+        // Reset the ForwardFlip trigger when transitioning to idle/walk/run
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle/Walk/Run") && animator.GetBool("ForwardFlip"))
+        {
+            animator.ResetTrigger("ForwardFlip");
+        }
+        */
 
     }
 
@@ -184,16 +252,38 @@ public class CharacterMovement : MonoBehaviour
             if (Input.GetButtonDown("Jump")) // Code to jump
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+
+                _numberOfJumps++;
             }
         }
         else // if not grounded
         {
-            playerVelocity.y += gravityValue * Time.deltaTime;
+            if (_numberOfJumps >= maxNumberOfJumps)
+            {
+                return;
+            } else
+            {
+                playerVelocity.y += gravityValue * Time.deltaTime;
+            }
+            
         }
 
         controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
 
     }
+    private bool IsGrounded() => CharacterController.isGrounded;
+    private IEnumerator WaitForLanding()
+    {
+        //ol isGrounded = controller.isGrounded;
+
+
+        yield return new WaitUntil(() => !IsGrounded());
+        yield return new WaitUntil(IsGrounded);
+
+        _numberOfJumps = 0;
+    }
+
+ 
 
     float GetMovementSpeed()
     {
