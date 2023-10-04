@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(CharacterController))]
 public class CharacterMovement : MonoBehaviour
 {
 
@@ -20,8 +22,8 @@ public class CharacterMovement : MonoBehaviour
     public float runSpeed = 8;
     public float jumpHeight = 1f;
     public float gravityValue = -9.81f;
-    //public bool hasDoubleJump = false;
-    // private static readonly int ForwardFlipTrigger = Animator.StringToHash("ForwardFlip");
+   // public bool hasDoubleJump = false;
+   //  private static readonly int ForwardFlipTrigger = Animator.StringToHash("ForwardFlip");
     //private bool isJumpAnimationComplete = true;
 
     [SerializeField] private float jumpPower;
@@ -41,6 +43,7 @@ public class CharacterMovement : MonoBehaviour
         ProcessGravity();
         UpdateRotation();
         //HandleDoubleJump();
+        doubleJumpGateKeeper();
     }
 
     public void LateUpdate()
@@ -61,6 +64,33 @@ public class CharacterMovement : MonoBehaviour
         hasDoubleJump = true;
     }
     */
+
+    public void doubleJumpGateKeeper()
+    {
+        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps) return;
+        if (_numberOfJumps == 0) StartCoroutine(WaitForLanding());
+
+        _numberOfJumps++;
+        //_velocity = jumpPower;
+
+        //what to do:
+        /*
+         * use yt vid and make gatekeeper for controlling if allowed to jump + redesign wait for landing
+         * 
+         */
+    }
+
+    private bool IsGrounded() => CharacterController.isGrounded;
+    private IEnumerator WaitForLanding()
+    {
+        //ol isGrounded = controller.isGrounded;
+
+
+        yield return new WaitUntil(() => !IsGrounded());
+        yield return new WaitUntil(IsGrounded);
+
+        _numberOfJumps = 0;
+    }
 
     public void ProcessGravity1()
     {
@@ -161,6 +191,7 @@ public class CharacterMovement : MonoBehaviour
         // Normalize to ensure consistent speed
         cameraForward.Normalize();
         cameraRight.Normalize();
+
 
         // Calculate the movement direction based on input
         Vector3 moveDirection = (cameraForward * Input.GetAxis("Vertical")) + (cameraRight * Input.GetAxis("Horizontal"));
@@ -271,18 +302,20 @@ public class CharacterMovement : MonoBehaviour
         controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
 
     }
-    private bool IsGrounded() => CharacterController.isGrounded;
-    private IEnumerator WaitForLanding()
-    {
-        //ol isGrounded = controller.isGrounded;
+    /*
+    public void ProcessGravity2(InputAction.CallbackContext context) {
 
+        if (!context.started) return;
+        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps) return;
+        if (_numberOfJumps == 0) StartCoroutine(WaitForLanding());
 
-        yield return new WaitUntil(() => !IsGrounded());
-        yield return new WaitUntil(IsGrounded);
-
-        _numberOfJumps = 0;
-    }
-
+        _numberOfJumps++;
+        _velocity = jumpPower;
+    
+    
+    
+}
+    */
  
 
     float GetMovementSpeed()
