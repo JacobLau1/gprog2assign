@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -9,7 +10,7 @@ public class CharacterMovement : MonoBehaviour
     public Vector3 playerVelocity;
     public Vector3 move;
 
-    public bool groundedPlayer;
+    //public bool groundedPlayer;
     public float mouseSensitivy = 5.0f;
 
     private CharacterController controller;
@@ -20,6 +21,10 @@ public class CharacterMovement : MonoBehaviour
     public float jumpHeight = 1f;
     public float gravityValue = -9.81f;
 
+    public int jumpsDone = 0;
+    public int maxJumps = 2;
+    public bool hasDoneFlip = false;
+
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -28,16 +33,18 @@ public class CharacterMovement : MonoBehaviour
 
     public void Update()
     {
+        //UpdateAnimator();
         ProcessMovement();
         ProcessGravity();
         UpdateRotation();
+        //hasDoneFlip = false;
     }
-
+    
     public void LateUpdate()
     {
         UpdateAnimator();
     }
-
+    
     void DisableRootMotion()
     {
         animator.applyRootMotion = false;
@@ -45,10 +52,6 @@ public class CharacterMovement : MonoBehaviour
 
     void ProcessMovement()
     {
-        //good movement and camera
-        //just sometimes hard to jump while running
-        //also isGrounded is always on?
-
         // Get the camera's forward and right vectors
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 cameraRight = Camera.main.transform.right;
@@ -90,64 +93,106 @@ public class CharacterMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         transform.Rotate(0, mouseX * mouseSensitivy, 0, Space.Self);
     }
-
+    
     void UpdateAnimator()
     {
         bool isGrounded = controller.isGrounded;
-        // TODO 
-        if (move != Vector3.zero)       //if not staying still
-        {
-            if (GetMovementSpeed() == runSpeed)
-            {
-                animator.SetFloat("Speed", 1f);
-            }
-            else
-            {
-                animator.SetFloat("Speed", 0.5f);
-            }
-        }
-        else
-        {
-            animator.SetFloat("Speed", 0.0f);
-        }
 
-        animator.SetBool("isGrounded", isGrounded);
-
+        if (!hasDoneFlip && jumpsDone == 2)
+        {
+            // animator.applyRootMotion = true;
+            animator.SetTrigger("ForwardFlip");
+            //animator.SetBool("isGrounded", isGrounded);
+            hasDoneFlip = true;
+        }
         /*
-        if (Input.GetButtonDown("Fire1"))
+        if (controller.isGrounded)  //to reset the just done the flip so it doesnt redo flip again
         {
-            animator.applyRootMotion = true;
-            animator.SetTrigger("doRoll");
+            hasDoneFlip = false;
+            animator.SetBool("isGrounded", true);
         }
         */
 
+        if (isGrounded)
+        {
+            animator.SetBool("isGrounded", true);
+           // animator.ResetTrigger("ForwardFlip");
+            if (move != Vector3.zero)       //if not staying still
+            {
+                if (GetMovementSpeed() == runSpeed)
+                {
+                    animator.SetFloat("Speed", 1f);
+                }
+                else
+                {
+                    animator.SetFloat("Speed", 0.5f);
+                }
+            }
+            else //staying still
+            {
+                animator.SetFloat("Speed", 0.0f);
+            }
+        } else
+        {
+            animator.SetBool("isGrounded", false);
+            if (move != Vector3.zero)       //if not staying still
+            {
+                if (GetMovementSpeed() == runSpeed)
+                {
+                    animator.SetFloat("Speed", 1f);
+                }
+                else
+                {
+                    animator.SetFloat("Speed", 0.5f);
+                }
+            }
+            else //staying still
+            {
+                animator.SetFloat("Speed", 0.0f);
+            }
+        }
     }
 
     public void ProcessGravity()
     {
         bool isGrounded = controller.isGrounded;
-        // Since there is no physics applied on character controller we have this applies to reapply gravity
 
-        if (isGrounded)
+        if (isGrounded && playerVelocity.y < 0.0f)
         {
-            if (playerVelocity.y < 0.0f) // we want to make sure the players stays grounded when on the ground
-            {
-                playerVelocity.y = -1.0f;
-            }
+            playerVelocity.y = -1.0f;
+            jumpsDone = 0;
+            //animator.SetBool("isGrounded", true);
+            hasDoneFlip = false;
+        }
 
-            if (Input.GetButtonDown("Jump")) // Code to jump
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (isGrounded)
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                jumpsDone++;
+               // animator.SetBool("isGrounded", isGrounded);
+            } else if (jumpsDone < maxJumps)    //doing a double jump
+            {
+                playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                jumpsDone++;
+               // animator.SetBool("isGrounded", isGrounded);
+                // doingDoubleJump = true;
             }
         }
-        else // if not grounded
+
+        if (!isGrounded) //falling back to ground
         {
+           
             playerVelocity.y += gravityValue * Time.deltaTime;
+           // animator.SetBool("isGrounded", isGrounded);
         }
 
-        controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
-    }
 
+        controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
+        //animator.SetBool("isGrounded", isGrounded);
+    }
+    
     float GetMovementSpeed()
     {
         if (Input.GetButton("Fire3"))// Left shift
