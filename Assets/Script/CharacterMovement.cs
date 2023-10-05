@@ -22,7 +22,7 @@ public class CharacterMovement : MonoBehaviour
     public float gravityValue = -9.81f;
 
     public int jumpsDone = 0;
-    public int maxJumps = 2;
+    public int maxJumps = 1;
     public bool hasDoneFlip = false;
 
     private void Start()
@@ -33,11 +33,9 @@ public class CharacterMovement : MonoBehaviour
 
     public void Update()
     {
-        //UpdateAnimator();
         ProcessMovement();
         ProcessGravity();
         UpdateRotation();
-        //hasDoneFlip = false;
     }
     
     public void LateUpdate()
@@ -176,6 +174,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 jumpsDone++;
+                maxJumps = 1;
                // animator.SetBool("isGrounded", isGrounded);
                 // doingDoubleJump = true;
             }

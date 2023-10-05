@@ -49,12 +49,8 @@ public class BluePowerUp : MonoBehaviour
             gameObject.SetActive(false);
             Invoke("UnhideTarget", 30.0f);
 
-           // CharacterMovement cm = other.GetComponent<CharacterMovement>();
-
-           // cm.hasDoubleJump = true;
-
             CharacterMovement cm = other.GetComponent<CharacterMovement>();
-            //cm.hasDoubleJump = true;
+            cm.maxJumps = 2;
 
             Destroy(particles, 2.0f);
         }
