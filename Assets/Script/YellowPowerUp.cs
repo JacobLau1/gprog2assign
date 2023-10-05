@@ -35,7 +35,7 @@ public class YellowPowerUp : MonoBehaviour
         if (other.tag == ("Player"))
         {
             GameManager.Score += 50;
-            Debug.Log("Player touched the yellowpowerup!");
+            Debug.Log("Player touched the yellow powerup!");
 
             Vector3 boxPosition = transform.position;
 

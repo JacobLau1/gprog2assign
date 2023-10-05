@@ -35,7 +35,7 @@ public class BluePowerUp : MonoBehaviour
     {
         if (other.tag == ("Player"))
         {
-            Debug.Log("Player touched the bluepowerup!");
+            Debug.Log("Player touched the blue powerup!");
 
             Vector3 boxPosition = transform.position;
 
