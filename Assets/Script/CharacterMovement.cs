@@ -95,8 +95,8 @@ public class CharacterMovement : MonoBehaviour
     void UpdateAnimator()
     {
         bool isGrounded = controller.isGrounded;
-
-        if (!hasDoneFlip && jumpsDone == 2)
+   
+        if (!hasDoneFlip && jumpsDone == 2)     
         {
             // animator.applyRootMotion = true;
             animator.SetTrigger("ForwardFlip");
@@ -191,7 +191,7 @@ public class CharacterMovement : MonoBehaviour
         controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
         //animator.SetBool("isGrounded", isGrounded);
     }
-    
+
     float GetMovementSpeed()
     {
         if (Input.GetButton("Fire3"))// Left shift
