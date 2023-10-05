@@ -1713,6 +1713,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7474032605974717867, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: ScoreDisplay
+      value: 
+      objectReference: {fileID: 316942123}
+    - target: {fileID: -5351580098200726490, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 408997943918328944, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
       propertyPath: m_Name
       value: Trap
@@ -1759,6 +1767,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 408997943918328951, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3011916136716484767, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

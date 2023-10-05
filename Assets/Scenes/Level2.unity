@@ -360,7 +360,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 243493909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 045d87efaff1f54459feccd1ab38d227, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e67be2a38cde4042b72056025b137a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreDisplay: {fileID: 243493910}
@@ -371,6 +371,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7474032605974717867, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: ScoreDisplay
+      value: 
+      objectReference: {fileID: 243493910}
+    - target: {fileID: -5351580098200726490, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 408997943918328944, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
       propertyPath: m_Name
       value: Trap
@@ -419,6 +427,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3011916136716484767, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
+      propertyPath: ScoreDisplay
+      value: 
+      objectReference: {fileID: 243493910}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1641fd70b76de9b4aafbf9f63aa66231, type: 3}
 --- !u!1 &429326520
@@ -1945,7 +1957,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2042609099
 GameObject:

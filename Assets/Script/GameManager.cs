@@ -8,14 +8,24 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public static int Score = 0;
+    public static float Score = 0;
     public Text ScoreDisplay;
  
     // Start is called before the first frame update
     private void Awake()
     {
-        Instance = this;
-        DontDestroyOnLoad(Instance);
+        //   Instance = this;
+        // DontDestroyOnLoad(Instance);
+
+        // If there is an instance, and it's not me, delete myself. 
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     public void IncrementScore()
@@ -26,6 +36,11 @@ public class GameManager : MonoBehaviour
     public float GetScore()
     {
         return Score;
+    }
+
+    public void SetScore(float num)
+    {
+        Score = num;
     }
 
     public void Update()

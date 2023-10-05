@@ -9,7 +9,7 @@ public class FinishLevel1 : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("Player finished level1 ");
+            Debug.Log("Player finished level ");
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
