@@ -8,14 +8,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public static float Score = 0;
+    public static float Score;
     public Text ScoreDisplay;
  
     // Start is called before the first frame update
     private void Awake()
     {
-        //   Instance = this;
-        // DontDestroyOnLoad(Instance);
+        Score = 0;
 
         // If there is an instance, and it's not me, delete myself. 
         if (Instance != null && Instance != this)

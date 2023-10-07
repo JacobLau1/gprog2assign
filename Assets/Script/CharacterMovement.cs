@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -10,7 +9,6 @@ public class CharacterMovement : MonoBehaviour
     public Vector3 playerVelocity;
     public Vector3 move;
 
-    //public bool groundedPlayer;
     public float mouseSensitivy = 5.0f;
 
     private CharacterController controller;

@@ -34,7 +34,23 @@ public class YellowPowerUp : MonoBehaviour
     {
         if (other.tag == ("Player"))
         {
-            GameManager.Score += 50;
+            GameManager gm = new GameManager();
+            GameManager2 gm2 = new GameManager2();
+            GameManager3 gm3 = new GameManager3();
+
+            switch (SceneManager.GetActiveScene().buildIndex)
+            {
+                case 1:
+                    gm.IncrementScore();
+                    break;
+                case 2:
+                    gm2.IncrementScore();
+                    break;
+                case 3:
+                    gm3.IncrementScore();
+                    break;
+            }
+
             Debug.Log("Player touched the yellow powerup!");
 
             Vector3 boxPosition = transform.position;

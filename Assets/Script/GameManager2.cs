@@ -14,9 +14,9 @@ public class GameManager2 : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-      //  Instance = this;
-      // DontDestroyOnLoad(Instance);
-        Score = GameManager2.Score;
+        GameManager gm = new GameManager();
+        SetScore(gm.GetScore());
+
         // If there is an instance, and it's not me, delete myself. 
         if (Instance != null && Instance != this)
         {

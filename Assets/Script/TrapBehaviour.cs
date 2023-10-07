@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class TrapBehaviour : MonoBehaviour
 {
-
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == ("Player"))
+        if (other.tag == "Player")
         {
             // Reload the current scene.
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -18,7 +17,7 @@ public class TrapBehaviour : MonoBehaviour
             GameManager2 gm2 = new GameManager2();
             GameManager3 gm3 = new GameManager3();
 
-            switch(SceneManager.GetActiveScene().buildIndex)
+            switch (SceneManager.GetActiveScene().buildIndex)
             {
                 case 1:
                     gm.SetScore(0.0f);
