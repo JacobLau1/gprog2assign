@@ -15,7 +15,7 @@ public class CharacterMovement : MonoBehaviour
     private Animator animator;
 
     public float walkSpeed = 5;
-    public float runSpeed = 8;
+    public float runSpeed = 10;
     public float jumpHeight = 1f;
     public float gravityValue = -9.81f;
 
@@ -69,18 +69,19 @@ public class CharacterMovement : MonoBehaviour
             // Normalize the movement direction for consistent speed
             moveDirection.Normalize();
 
+            // Determine the speed based on whether the Shift button is pressed
+            float speed = GetMovementSpeed();
+         
             // Move the character
-            controller.Move(moveDirection * GetMovementSpeed() * Time.deltaTime);
+            controller.Move(moveDirection * speed * Time.deltaTime);
 
-            // Set animator parameters for animation
-            animator.SetFloat("Speed", moveDirection.magnitude); // Adjust animation speed based on moveDirection magnitude
-                                                                 //    animator.SetBool("isMoving", true); // Set an "isMoving" parameter for your idle vs. movement animations
+            // Set animator parameters for animation with a range between 0 and 1
+            animator.SetFloat("Speed", Mathf.Clamp01(speed / runSpeed)); // Normalize speed to the range [0, 1]
         }
         else
         {
             // If no movement input, set animator parameters accordingly
             animator.SetFloat("Speed", 0f);
-            //    animator.SetBool("isMoving", false);
         }
     }
 
@@ -89,63 +90,26 @@ public class CharacterMovement : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         transform.Rotate(0, mouseX * mouseSensitivy, 0, Space.Self);
     }
-    
+
     void UpdateAnimator()
     {
         bool isGrounded = controller.isGrounded;
    
         if (!hasDoneFlip && jumpsDone == 2)     
         {
-            // animator.applyRootMotion = true;
             animator.SetTrigger("ForwardFlip");
-            //animator.SetBool("isGrounded", isGrounded);
             hasDoneFlip = true;
         }
-        /*
-        if (controller.isGrounded)  //to reset the just done the flip so it doesnt redo flip again
-        {
-            hasDoneFlip = false;
-            animator.SetBool("isGrounded", true);
-        }
-        */
 
-        if (isGrounded)
+        animator.SetBool("isGrounded", (isGrounded) ? true : false);
+      
+        if (move != Vector3.zero)       //if not staying still
         {
-            animator.SetBool("isGrounded", true);
-           // animator.ResetTrigger("ForwardFlip");
-            if (move != Vector3.zero)       //if not staying still
-            {
-                if (GetMovementSpeed() == runSpeed)
-                {
-                    animator.SetFloat("Speed", 1f);
-                }
-                else
-                {
-                    animator.SetFloat("Speed", 0.5f);
-                }
-            }
-            else //staying still
-            {
-                animator.SetFloat("Speed", 0.0f);
-            }
-        } else
+            animator.SetFloat("Speed", GetMovementSpeed() == runSpeed ? 1f : 0.5f);
+        }
+        else //staying still
         {
-            animator.SetBool("isGrounded", false);
-            if (move != Vector3.zero)       //if not staying still
-            {
-                if (GetMovementSpeed() == runSpeed)
-                {
-                    animator.SetFloat("Speed", 1f);
-                }
-                else
-                {
-                    animator.SetFloat("Speed", 0.5f);
-                }
-            }
-            else //staying still
-            {
-                animator.SetFloat("Speed", 0.0f);
-            }
+            animator.SetFloat("Speed", 0.0f);
         }
     }
 
@@ -157,7 +121,6 @@ public class CharacterMovement : MonoBehaviour
         {
             playerVelocity.y = -1.0f;
             jumpsDone = 0;
-            //animator.SetBool("isGrounded", true);
             hasDoneFlip = false;
         }
 
@@ -167,38 +130,24 @@ public class CharacterMovement : MonoBehaviour
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 jumpsDone++;
-               // animator.SetBool("isGrounded", isGrounded);
             } else if (jumpsDone < maxJumps)    //doing a double jump
             {
                 playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
                 jumpsDone++;
                 maxJumps = 1;
-               // animator.SetBool("isGrounded", isGrounded);
-                // doingDoubleJump = true;
             }
         }
 
         if (!isGrounded) //falling back to ground
-        {
-           
+        {  
             playerVelocity.y += gravityValue * Time.deltaTime;
-           // animator.SetBool("isGrounded", isGrounded);
         }
 
-
         controller.Move(move * Time.deltaTime * GetMovementSpeed() + playerVelocity * Time.deltaTime);
-        //animator.SetBool("isGrounded", isGrounded);
     }
 
     float GetMovementSpeed()
     {
-        if (Input.GetButton("Fire3"))// Left shift
-        {
-            return runSpeed;
-        }
-        else
-        {
-            return walkSpeed;
-        }
+        return (Input.GetButton("Fire3")) ? runSpeed : walkSpeed;
     }
 }

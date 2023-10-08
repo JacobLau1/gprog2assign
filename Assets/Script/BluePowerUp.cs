@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BluePowerUp : MonoBehaviour
 {
-
     public ParticleSystem particleSystemPrefab;
 
     public float floatSpeed = 1.0f;  // Speed of floating.
@@ -61,5 +60,4 @@ public class BluePowerUp : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
-
 }

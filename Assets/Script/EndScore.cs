@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class EndScore : MonoBehaviour
 {
-
     public static EndScore Instance { get; private set; }
     public static float Score;
     public Text ScoreDisplay;

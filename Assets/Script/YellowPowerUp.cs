@@ -66,6 +66,4 @@ public class YellowPowerUp : MonoBehaviour
             Destroy(particles, 2.0f);
         }
     }
-
-   
 }

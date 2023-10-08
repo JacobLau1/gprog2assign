@@ -6,6 +6,7 @@ public class SpinTrap : MonoBehaviour
 {
     public float rotationSpeed = 20.0f;
     Rigidbody rigidBody;
+
     // Start is called before the first frame update
     void Start()
     {

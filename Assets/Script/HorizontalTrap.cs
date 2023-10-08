@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HorizontalTrap : MonoBehaviour
 {
-
     public Transform startPoint; // The starting point of the trap's movement
     public Transform endPoint;   // The ending point of the trap's movement
     public float moveSpeed = 5f; // The speed at which the trap moves

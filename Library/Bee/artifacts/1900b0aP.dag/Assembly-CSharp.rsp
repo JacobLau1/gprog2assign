@@ -313,6 +313,7 @@
 "Assets/Script/CharacterMovement.cs"
 "Assets/Script/DeathPlane.cs"
 "Assets/Script/Elevator.cs"
+"Assets/Script/EndScore.cs"
 "Assets/Script/FinishLevel.cs"
 "Assets/Script/GameManager.cs"
 "Assets/Script/GameManager2.cs"

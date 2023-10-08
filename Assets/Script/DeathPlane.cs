@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class DeathPlane : MonoBehaviour
 {
-
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
@@ -31,7 +30,5 @@ public class DeathPlane : MonoBehaviour
                     break;
             }
         }
-
     }
-
 }
